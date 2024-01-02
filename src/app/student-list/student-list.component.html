@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Information Form</title>
+</head>
+<body>
+
+ 
+<div *ngIf="getDetail">
+    <h2>Student Information Form</h2>
+<form #studentdetails="ngForm" [formGroup]="studentlist" (ngSubmit)="Submit()">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" formControlName="NameOfStudent" required>
+
+    <label for="department">Department:</label>
+    <input type="text" id="department" name="department" formControlName="DepartmentName" required>
+
+    <label for="grade">Grade:</label>
+    <input type="text" id="grade" name="grade" formControlName="Grade" required>
+
+    <button type="submit">Submit</button>
+  </form>
+  <button (click)="Display()">Display details</button>
+</div>
+
+<div *ngIf="!getDetail">
+    <h3>Details of Student are as follows : </h3>
+    <button (click)="listAll()">get all student detail</button>
+    <button (click)="filter()">filter by scope</button>
+    <div *ngIf="type==='All'">
+    <ul>
+        <li *ngFor="let std of student">name of student:{{std.NameOfStudent}}</li>
+    </ul>
+    </div>
+    <div *ngIf="type==='filter'">
+        <input type="radio" name="selectField" value="grade" [(ngModel)]="fieldName" (click)="clear()"> filter by grade <br>
+        <input type="radio" name="selectField" value="department" [(ngModel)]="fieldName" (click)="clear()"> filter by department
+    </div>
+    <div *ngIf="fieldName === 'grade' && type==='filter'">
+        <input #inputbox type="text" [(ngModel)]="gradeValue">
+        <button (click)="filterByGrade()">Filter By Grade</button><br>
+        <ul #studentList>
+            <li *ngFor="let std of filteredStudents">Name of student: {{std.NameOfStudent}} - {{std.DepartmentName}} - {{std.Grade}}</li>
+        </ul>
+    </div>
+    <div [ngClass]="['addBackground']" *ngIf="fieldName === 'department' && type==='filter'">
+        <input #inputbox type="text" [(ngModel)]="departmentValue">
+        <button (click)="filterByDepartment()">Filter By department</button><br>
+        <ul #studentList>
+            <li *ngFor="let std of filteredStudents" [ngStyle]="{'color':color}">Name of student: {{std.NameOfStudent}} - {{std.DepartmentName}} - {{std.Grade}}</li>
+        </ul>
+    </div>
+    
+    <button (click)="Submit()">click to Add</button>
+</div>
+</body>
+</html>
+
